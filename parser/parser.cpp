@@ -2,12 +2,20 @@
 
 #include "parser.hpp"
 
+namespace {
+	const int NumberParsedData = 3;
+}
+
 Graph Parser::read(std::istream& in, const std::string& delimiters) {
     Graph result;
 
     std::string line;
     while(std::getline(in, line)) {
         std::vector<std::string> temp = parse(split(trim(line), delimiters));
+
+		if (temp.size() != 3) {
+			throw (std::invalid_argument("Does not match the type"));
+		}
 
         result.addEdge(temp[0], temp[1], std::stoi(temp[2]));
         result.addEdge(temp[1], temp[0], std::stoi(temp[2]));

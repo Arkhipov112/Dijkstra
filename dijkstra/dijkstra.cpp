@@ -4,7 +4,7 @@
 
 #include "dijkstra.hpp"
 
-Way Dijkstra::find(const Graph& graph, const std::string& start, const std::string& end) {
+Path Dijkstra::find(const Graph& graph, const std::string& start, const std::string& end) {
     if (!graph.findVertex(start) || !graph.findVertex(end)) {
         throw (std::invalid_argument("Start or end vertex does not exist"));
     }
@@ -51,18 +51,18 @@ Way Dijkstra::find(const Graph& graph, const std::string& start, const std::stri
         }
     }
 
-    std::vector<std::string> way;
+    std::vector<std::string> path;
     if (distances[end] == std::numeric_limits<int>::max()) {
-        return std::make_pair(way, -1);
+        return std::make_pair(path, -1);
     }
 
     std::string current = end;
     while (current != start) {
-        way.push_back(current);
+        path.push_back(current);
         current = predecessors[current];
     }
-    way.push_back(start);
-    std::reverse(way.begin(), way.end());
+    path.push_back(start);
+    std::reverse(path.begin(), path.end());
 
-    return std::make_pair(way, distances[end]);
+    return std::make_pair(path, distances[end]);
 }
