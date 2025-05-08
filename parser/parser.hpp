@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "../dijkstra/dijkstra.hpp"
+#include "../graph/graph.hpp"
 
 class Parser final {
 public:

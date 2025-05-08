@@ -9,15 +9,21 @@ add_subdirectory(
 )
 
 add_library(
-    dijkstra
-    dijkstra/dijkstra.cpp
-    dijkstra/dijkstra.hpp
+    graph
+    graph/graph.cpp
+    graph/graph.hpp
 )
 
 add_library(
     parser
     parser/parser.cpp
     parser/parser.hpp
+)
+
+add_library(
+    dijkstra
+    dijkstra/dijkstra.cpp
+    dijkstra/dijkstra.hpp
 )
 
 add_executable(
@@ -29,6 +35,7 @@ target_link_libraries(
     DijkstraTest
     gtest
     gtest_main
+    graph
     parser
     dijkstra
 )
