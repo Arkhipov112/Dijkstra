@@ -5,19 +5,14 @@
 
 #include "../graph/graph.hpp"
 
-class Parser final {
+class parser final {
 public:
-	Parser() = delete;
-
-    static Graph read(std::istream& in, const std::string& delimiters);
+	parser() = delete;
+    static graph read(std::istream& in, const std::string& delims);
+	static void write(std::ostream& out, const std::string& buffer);
 
 private:
-	// Возвращает строку без отступов слева и справа
 	static std::string trim(const std::string& line) noexcept;
-
-	// Заменяет разделительные символы на пробел
-	static std::string split(const std::string& line, const std::string& delimiters) noexcept;
-
-	// Возвращает вектор из отдельных значений
+	static std::string split(const std::string& line, const std::string& delims) noexcept;
 	static std::vector<std::string> parse(const std::string& line) noexcept;
 };

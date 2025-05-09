@@ -5,9 +5,9 @@
 
 #include "../graph/graph.hpp"
 
-typedef std::pair<std::vector<std::string>, int> Path;
+typedef std::pair<std::vector<std::string>, int> path;
 
-class Dijkstra final {
+class dijkstra final {
 public:
-    static Path find(const Graph& graph, const std::string& start, const std::string& end);
+    static path find_path(const graph& g, const std::string& start, const std::string& end);
 };

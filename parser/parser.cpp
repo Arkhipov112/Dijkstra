@@ -3,80 +3,77 @@
 #include "parser.hpp"
 
 namespace {
-	const int NumberParsedData = 3;
+	const int PARSED_COUNT = 3;
 }
 
-Graph Parser::read(std::istream& in, const std::string& delimiters) {
-    Graph result;
+graph parser::read(std::istream& in, const std::string& delims) {
+    graph res;
 
     std::string line;
     while(std::getline(in, line)) {
-        std::vector<std::string> temp = parse(split(trim(line), delimiters));
+        std::vector<std::string> temp = parse(split(trim(line), delims));
 
-		if (temp.size() != 3) {
+		if (temp.size() != PARSED_COUNT) {
 			throw (std::invalid_argument("Does not match the type"));
 		}
 
-        result.addEdge(temp[0], temp[1], std::stoi(temp[2]));
-        result.addEdge(temp[1], temp[0], std::stoi(temp[2]));
+        res.add_edge(temp[0], temp[1], std::stoi(temp[2]));
     }
 
-    return result;
+    return res;
 }
 
-std::string Parser::trim(const std::string& line) noexcept {
-	std::string result;
+std::string parser::trim(const std::string& line) noexcept {
+	std::string res;
 
-	// Пропускаем символы ' ' и '\t'
-	std::string whitespace{ " \t" };
+	std::string whitespace = " \t";
 
 	size_t first = line.find_first_not_of(whitespace);
 	if (first == std::string::npos) {
-		return result;
+		return res;
 	}
 
 	size_t last = line.find_last_not_of(whitespace);
 
-	result = line.substr(first, (last - first) + 1);
+	res = line.substr(first, (last - first) + 1);
 
-	return result;
+	return res;
 }
 
-std::string Parser::split(const std::string& line, const std::string& delimiters) noexcept {
-	std::string result;
+std::string parser::split(const std::string& line, const std::string& delims) noexcept {
+	std::string res;
 
 	bool need_space = false;
-	for (char symbol : line) {
-		if (delimiters.find(symbol) != std::string::npos) {
+	for (char c : line) {
+		if (delims.find(c) != std::string::npos) {
 			need_space = true;
 		}
 
 		else {
 			if (need_space) {
-				result += ' ';
+				res += ' ';
 				need_space = false;
 			}
 
-			result += symbol;
+			res += c;
 		}
 	}
 
-	return result;
+	return res;
 }
 
-std::vector<std::string> Parser::parse(const std::string& line) noexcept {
-	std::vector<std::string> result;
+std::vector<std::string> parser::parse(const std::string& line) noexcept {
+	std::vector<std::string> res;
 
 	size_t first = 0;
-	// Парсим значения, которые отделены ' '
 	size_t last = line.find(' ');
 
 	while (last != std::string::npos) {
-		result.push_back(line.substr(first, last - first));
+		res.push_back(line.substr(first, last - first));
 		first = last + 1;
 		last = line.find(' ', first);
 	}
-	result.push_back(line.substr(first));
+	res.push_back(line.substr(first));
 
-	return result;
+	return res;
 }
