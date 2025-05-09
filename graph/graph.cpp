@@ -11,11 +11,11 @@ void graph::add_edge(const std::string& from, const std::string& to, int dist) {
     adjacency[to][from] = dist;
 }
 
-bool graph::find_vertex(const std::string& vertex) const noexcept {
+bool graph::find_vertex(const std::string& vertex) const {
     return adjacency.count(vertex);
 }
 
-bool graph::find_edge(const std::string& from, const std::string& to) const noexcept {
+bool graph::find_edge(const std::string& from, const std::string& to) const {
     if ((!find_vertex(from)) || (!find_vertex(to))) {
         return false;
     }
@@ -25,13 +25,13 @@ bool graph::find_edge(const std::string& from, const std::string& to) const noex
 
 int graph::get_dist(const std::string& from, const std::string& to) const {
     if (!find_edge(from, to)) {
-        throw (std::out_of_range("Edge does not exist"));
+        throw (std::invalid_argument("Edge does not exist"));
     }
 
     return adjacency.at(from).at(to);
 }
 
-std::vector<std::string> graph::get_vertexes() const noexcept {
+std::vector<std::string> graph::get_vertexes() const {
     std::vector<std::string> res;
 
     for (const auto& v : adjacency) {
