@@ -24,6 +24,17 @@ graph parser::read(std::istream& in, const std::string& delims) {
     return res;
 }
 
+void parser::write(std::ostream& out, const path& buffer) noexcept {
+	out << "{ ";
+
+	size_t len = buffer.first.size();
+	for (int i = 0; i < len - 1; ++i) {
+		out << buffer.first[i] << ", ";
+	}
+
+	out << buffer.first[len - 1] << " } - " << buffer.second;
+}
+
 
 
 std::vector<std::string> parser::split(const std::string& line, const std::string& delims) {

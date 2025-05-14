@@ -100,6 +100,14 @@ TEST(ParserTest, ReadInvalidData) {
     EXPECT_THROW(graph g = parser::read(iss, " \t,.-"), std::invalid_argument);
 }
 
+TEST(ParserTest, Write) {
+    std::ostringstream oss;
+    path p = {{ "Moscow", "Toronto", "Krasnoyarsk" }, 11};
+
+    parser::write(oss, p);
+    EXPECT_EQ(oss.str(), "{ Moscow, Toronto, Krasnoyarsk } - 11");
+}
+
 TEST(DijkstraTest, FindPath) {
     graph g_1 = graph_init();
 
