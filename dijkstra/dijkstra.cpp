@@ -4,6 +4,10 @@
 
 #include "dijkstra.hpp"
 
+namespace {
+    const int INF = std::numeric_limits<int>::max();
+}
+
 path dijkstra::find_path(const graph& g, const std::string& start, const std::string& end) {
     if ((!g.find_vertex(start)) || (!g.find_vertex(end))) {
         throw (std::invalid_argument("Start or end vertex does not exist"));
@@ -14,46 +18,35 @@ path dijkstra::find_path(const graph& g, const std::string& start, const std::st
     std::map<std::string, std::string> preds;
 
     for (const auto& v : g.get_vertexes()) {
-        dists[v] = std::numeric_limits<int>::max();
+        dists[v] = INF;
         visited[v] = false;
     }
 
     dists[start] = 0;
 
     for (size_t i = 0; i < g.get_vertexes().size(); ++i) {
-        std::string current;
-        int min_dist = std::numeric_limits<int>::max();
+        std::string nearest;
+        int min_dist = INF;
 
         for (const auto& v : g.get_vertexes()) {
             if (!visited[v] && (dists[v] < min_dist)) {
                 min_dist = dists[v];
-                current = v;
+                nearest = v;
             }
         }
 
-        if (min_dist == std::numeric_limits<int>::max()) {
-            break;
-        }
+        visited[nearest] = true;
 
-        if (current == end) {
-            break;
-        }
-
-        visited[current] = true;
-
-        for (const auto& n : g.get_neighbors(current)) {
-            int new_dist = dists[current] + g.get_dist(current, n);
+        for (const auto& n : g.get_neighbors(nearest)) {
+            int new_dist = dists[nearest] + g.get_dist(nearest, n);
             if (new_dist < dists[n]) {
                 dists[n] = new_dist;
-                preds[n] = current;
+                preds[n] = nearest;
             }
         }
     }
 
     std::vector<std::string> path;
-    if (dists[end] == std::numeric_limits<int>::max()) {
-        return std::make_pair(path, -1);
-    }
 
     std::string current = end;
     while (current != start) {

@@ -79,3 +79,25 @@ TEST(GraphTest, GetNeighbors) {
     EXPECT_EQ(g.get_neighbors("Novosibirsk")[1], "Omsk");
     EXPECT_EQ(g.get_neighbors("Novosibirsk")[2], "Toronto");
 }
+
+TEST(DijkstraTest, FindPath) {
+    graph g_1 = graph_init();
+
+    path res_1 = dijkstra::find_path(g_1, "Moscow", "Krasnoyarsk");
+    EXPECT_EQ(res_1.first.size(), 3);
+    EXPECT_EQ(res_1.first[0], "Moscow");
+    EXPECT_EQ(res_1.first[1], "Toronto");
+    EXPECT_EQ(res_1.first[2], "Krasnoyarsk");
+    EXPECT_EQ(res_1.second, 11);
+
+    path res_2 = dijkstra::find_path(g_1, "Kiev", "Kiev");
+    EXPECT_EQ(res_2.first.size(), 1);
+    EXPECT_EQ(res_2.first[0], "Kiev");
+    EXPECT_EQ(res_2.second, 0);
+
+    graph g_2;
+    g_2.add_edge("Moscow", "Novosibirsk", 7);
+    g_2.add_edge("Omsk", "Toronto", 11);
+
+    EXPECT_THROW(dijkstra::find_path(g_2, "Moscow", "Toronto"), std::out_of_range);
+}
