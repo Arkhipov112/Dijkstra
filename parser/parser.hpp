@@ -12,7 +12,5 @@ public:
 	static void write(std::ostream& out, const std::string& buffer);
 
 private:
-	static std::string trim(const std::string& line);
-	static std::string split(const std::string& line, const std::string& delims) noexcept;
-	static std::vector<std::string> parse(const std::string& line);
+	static std::vector<std::string> split(const std::string& line, const std::string& delims);
 };

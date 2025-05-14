@@ -1,3 +1,4 @@
+#include <sstream>
 #include <stdexcept>
 
 #include "parser.hpp"
@@ -11,7 +12,7 @@ graph parser::read(std::istream& in, const std::string& delims) {
 
     std::string line;
     while(std::getline(in, line)) {
-        std::vector<std::string> temp = parse(split(trim(line), delims));
+        std::vector<std::string> temp = split(line, delims);
 
 		if (temp.size() != PARSED_COUNT) {
 			throw (std::invalid_argument("Does not match the type"));
@@ -23,57 +24,29 @@ graph parser::read(std::istream& in, const std::string& delims) {
     return res;
 }
 
-std::string parser::trim(const std::string& line) {
-	std::string res;
+std::vector<std::string> parser::split(const std::string& line, const std::string& delims) {
+	std::vector<std::string> res;
 
-	std::string whitespace = " \t";
+	std::istringstream iss(line);
+	std::string token;
 
-	size_t first = line.find_first_not_of(whitespace);
-	if (first == std::string::npos) {
-		return res;
-	}
-
-	size_t last = line.find_last_not_of(whitespace);
-
-	res = line.substr(first, (last - first) + 1);
-
-	return res;
-}
-
-std::string parser::split(const std::string& line, const std::string& delims) noexcept {
-	std::string res;
-
-	bool need_space = false;
-	for (char c : line) {
+	char c;
+	while (iss.get(c)) {
 		if (delims.find(c) != std::string::npos) {
-			need_space = true;
+			if (!token.empty()) {
+				res.push_back(token);
+				token.clear();
+			}
 		}
 
 		else {
-			if (need_space) {
-				res += ' ';
-				need_space = false;
-			}
-
-			res += c;
+			token += c;
 		}
 	}
 
-	return res;
-}
-
-std::vector<std::string> parser::parse(const std::string& line) {
-	std::vector<std::string> res;
-
-	size_t first = 0;
-	size_t last = line.find(' ');
-
-	while (last != std::string::npos) {
-		res.push_back(line.substr(first, last - first));
-		first = last + 1;
-		last = line.find(' ', first);
+	if (!token.empty()) {
+		res.push_back(token);
 	}
-	res.push_back(line.substr(first));
 
 	return res;
 }

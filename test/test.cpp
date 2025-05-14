@@ -80,6 +80,26 @@ TEST(GraphTest, GetNeighbors) {
     EXPECT_EQ(g.get_neighbors("Novosibirsk")[2], "Toronto");
 }
 
+TEST(ParserTest, ReadValidData) {
+    std::istringstream iss(
+        "\tMoscow, -Novosibirsk. 7 \n" \
+        "\tMoscow, -Toronto. 9 "
+    );
+
+    graph g = parser::read(iss, " \t,.-");
+    EXPECT_EQ(g.get_dist("Moscow", "Novosibirsk"), 7);
+    EXPECT_EQ(g.get_dist("Moscow", "Toronto"), 9);
+}
+
+TEST(ParserTest, ReadInvalidData) {
+    std::istringstream iss(
+        "\tMoscow, -Novosibirsk \n" \
+        "\tMoscow, -Toronto "
+    );
+
+    EXPECT_THROW(graph g = parser::read(iss, " \t,.-"), std::invalid_argument);
+}
+
 TEST(DijkstraTest, FindPath) {
     graph g_1 = graph_init();
 
