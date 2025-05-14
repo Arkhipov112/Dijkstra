@@ -42,9 +42,13 @@ std::vector<std::string> graph::get_vertexes() const {
 }
 
 std::vector<std::string> graph::get_neighbors(const std::string& vertex) const {
-    const auto& edges = adjacency.at(vertex);
+    if (!find_vertex(vertex)) {
+        throw (std::invalid_argument("Vertex does not exist"));
+    }
 
     std::vector<std::string> res;
+
+    const auto& edges = adjacency.at(vertex);
 
     for (const auto& e : edges) {
         res.push_back(e.first);

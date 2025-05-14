@@ -127,5 +127,5 @@ TEST(DijkstraTest, FindPath) {
     g_2.add_edge("Moscow", "Novosibirsk", 7);
     g_2.add_edge("Omsk", "Toronto", 11);
 
-    EXPECT_THROW(dijkstra::find_path(g_2, "Moscow", "Toronto"), std::out_of_range);
+    EXPECT_THROW(dijkstra::find_path(g_2, "Moscow", "Toronto"), std::invalid_argument);
 }
