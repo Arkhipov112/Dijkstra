@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-struct graph final {
+class graph final {
 public:
     void add_edge(const std::string& from, const std::string& to, int dist);
     
@@ -15,5 +15,6 @@ public:
     std::vector<std::string> get_neighbors(const std::string& vertex) const;
     
 private:
+    // Структуру (поменять)
     std::map<std::string, std::map<std::string, int>> adjacency;
 };

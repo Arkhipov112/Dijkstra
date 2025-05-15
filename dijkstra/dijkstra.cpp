@@ -1,13 +1,14 @@
+#include "dijkstra.hpp"
+
 #include <algorithm>
 #include <limits>
 #include <stdexcept>
-
-#include "dijkstra.hpp"
 
 namespace {
     const int INF = std::numeric_limits<int>::max();
 }
 
+// Разбить на методы
 path dijkstra::find_path(const graph& g, const std::string& start, const std::string& end) {
     if ((!g.find_vertex(start)) || (!g.find_vertex(end))) {
         throw (std::invalid_argument("Start or end vertex does not exist"));
