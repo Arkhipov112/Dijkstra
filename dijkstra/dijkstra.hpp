@@ -1,15 +1,18 @@
 #pragma once
-#include <map>
+
+#include "../vertex/vertex.hpp"
+#include "../undirected_graph/undirected_graph.hpp"
+
 #include <string>
 #include <vector>
 
-#include "../graph/graph.hpp"
+struct Path final {
+    std::vector<Vertex> path;
+    int weight;
+};
 
-// Структуру
-typedef std::pair<std::vector<std::string>, int> path;
-
-class dijkstra final {
+class Dijkstra final {
 public:
-    dijkstra() = delete;
-    static path find_path(const graph& g, const std::string& start, const std::string& end);
+    Dijkstra() = delete;
+    static Path findPath(const UndirectedGraph& ug, const Vertex& start, const Vertex& end);
 };

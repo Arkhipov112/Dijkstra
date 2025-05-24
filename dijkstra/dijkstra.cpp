@@ -8,28 +8,27 @@ namespace {
     const int INF = std::numeric_limits<int>::max();
 }
 
-// Разбить на методы
-path dijkstra::find_path(const graph& g, const std::string& start, const std::string& end) {
-    if ((!g.find_vertex(start)) || (!g.find_vertex(end))) {
+Path Dijkstra::findPath(const UndirectedGraph& ug, const Vertex& start, const Vertex& end) {
+    if (!ug.findVertex(start) || !ug.findVertex(end)) {
         throw (std::invalid_argument("Start or end vertex does not exist"));
     }
 
-    std::map<std::string, int> dists;
-    std::map<std::string, bool> visited;
-    std::map<std::string, std::string> preds;
+    std::map<Vertex, int> dists;
+    std::map<Vertex, bool> visited;
+    std::map<Vertex, Vertex> preds;
 
-    for (const auto& v : g.get_vertexes()) {
+    for (const auto& v : ug.getVertices()) {
         dists[v] = INF;
         visited[v] = false;
     }
 
     dists[start] = 0;
 
-    for (size_t i = 0; i < g.get_vertexes().size(); ++i) {
-        std::string nearest;
+    for (size_t i = 0; i < ug.getVertices().size(); ++i) {
+        Vertex nearest;
         int min_dist = INF;
 
-        for (const auto& v : g.get_vertexes()) {
+        for (const auto& v : ug.getVertices()) {
             if (!visited[v] && (dists[v] < min_dist)) {
                 min_dist = dists[v];
                 nearest = v;
@@ -38,8 +37,8 @@ path dijkstra::find_path(const graph& g, const std::string& start, const std::st
 
         visited[nearest] = true;
 
-        for (const auto& n : g.get_neighbors(nearest)) {
-            int new_dist = dists[nearest] + g.get_dist(nearest, n);
+        for (const auto& n : ug.getNeighbors(nearest)) {
+            int new_dist = dists[nearest] + ug.getWeight(nearest, n);
             if (new_dist < dists[n]) {
                 dists[n] = new_dist;
                 preds[n] = nearest;
@@ -47,15 +46,17 @@ path dijkstra::find_path(const graph& g, const std::string& start, const std::st
         }
     }
 
-    std::vector<std::string> path;
+    Path p;
 
-    std::string current = end;
+    Vertex current = end;
     while (current != start) {
-        path.push_back(current);
+        p.path.push_back(current);
         current = preds[current];
     }
-    path.push_back(start);
-    std::reverse(path.begin(), path.end());
+    p.path.push_back(start);
+    std::reverse(p.path.begin(), p.path.end());
 
-    return std::make_pair(path, dists[end]);
+    p.weight = dists[end];
+
+    return p;
 }

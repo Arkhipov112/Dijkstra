@@ -1,131 +1,122 @@
-#include <gtest/gtest.h>
+#include "../googletest/googletest/include/gtest/gtest.h"
 
 #include "../parser/parser.hpp"
 #include "../dijkstra/dijkstra.hpp"
 
-graph graph_init() {
-    graph g;
+UndirectedGraph graphInit() {
+    UndirectedGraph ug;
 
-    g.add_edge("Moscow", "Novosibirsk", 7);
-    g.add_edge("Moscow", "Toronto", 9);
-    g.add_edge("Moscow", "Krasnoyarsk", 14);
-    g.add_edge("Novosibirsk", "Toronto", 10);
-    g.add_edge("Novosibirsk", "Omsk", 15);
-    g.add_edge("Omsk", "Toronto", 11);
-    g.add_edge("Toronto", "Krasnoyarsk", 2);
-    g.add_edge("Krasnoyarsk", "Kiev", 9);
-    g.add_edge("Kiev", "Omsk", 6);
+    ug.addEdge(Vertex("Moscow"), Vertex("Novosibirsk"), 7);
+    ug.addEdge(Vertex("Moscow"), Vertex("Toronto"), 9);
+    ug.addEdge(Vertex("Moscow"), Vertex("Krasnoyarsk"), 14);
+    ug.addEdge(Vertex("Novosibirsk"), Vertex("Toronto"), 10);
+    ug.addEdge(Vertex("Novosibirsk"), Vertex("Omsk"), 15);
+    ug.addEdge(Vertex("Omsk"), Vertex("Toronto"), 11);
+    ug.addEdge(Vertex("Toronto"), Vertex("Krasnoyarsk"), 2);
+    ug.addEdge(Vertex("Krasnoyarsk"), Vertex("Kiev"), 9);
+    ug.addEdge(Vertex("Kiev"), Vertex("Omsk"), 6);
     
-    return g;    
+    return ug;    
 }
 
-TEST(GraphTest, AddEdgeAndFindVertexAndFindEdge) {
-    graph g = graph_init();
+TEST(UndirectedGraphTest, AddEdge_FindVertex_FindEdge) {
+    UndirectedGraph ug = graphInit();
 
-    EXPECT_TRUE(g.find_vertex("Moscow"));
-    EXPECT_TRUE(g.find_vertex("Novosibirsk"));
-    EXPECT_TRUE(g.find_vertex("Toronto"));
-    EXPECT_TRUE(g.find_vertex("Krasnoyarsk"));
-    EXPECT_TRUE(g.find_vertex("Omsk"));
-    EXPECT_TRUE(g.find_vertex("Kiev"));
+    EXPECT_TRUE(ug.findVertex(Vertex("Moscow")));
+    EXPECT_TRUE(ug.findVertex(Vertex("Novosibirsk")));
+    EXPECT_TRUE(ug.findVertex(Vertex("Toronto")));
+    EXPECT_TRUE(ug.findVertex(Vertex("Krasnoyarsk")));
+    EXPECT_TRUE(ug.findVertex(Vertex("Omsk")));
+    EXPECT_TRUE(ug.findVertex(Vertex("Kiev")));
 
-    EXPECT_FALSE(g.find_vertex("Abakan"));
-    EXPECT_FALSE(g.find_vertex("Ivanovo"));
+    EXPECT_FALSE(ug.findVertex(Vertex("Abakan")));
+    EXPECT_FALSE(ug.findVertex(Vertex("Ivanovo")));
 
-    EXPECT_TRUE(g.find_edge("Moscow", "Novosibirsk"));
-    EXPECT_TRUE(g.find_edge("Moscow", "Toronto"));
-    EXPECT_TRUE(g.find_edge("Moscow", "Krasnoyarsk"));
-    EXPECT_TRUE(g.find_edge("Toronto", "Novosibirsk"));
-    EXPECT_TRUE(g.find_edge("Omsk", "Novosibirsk"));
+    EXPECT_TRUE(ug.findEdge(Vertex("Moscow"), Vertex("Novosibirsk")));
+    EXPECT_TRUE(ug.findEdge(Vertex("Moscow"), Vertex("Toronto")));
+    EXPECT_TRUE(ug.findEdge(Vertex("Moscow"), Vertex("Krasnoyarsk")));
+    EXPECT_TRUE(ug.findEdge(Vertex("Toronto"), Vertex("Novosibirsk")));
+    EXPECT_TRUE(ug.findEdge(Vertex("Omsk"), Vertex("Novosibirsk")));
 
-    EXPECT_FALSE(g.find_edge("Omsk", "Krasnoyarsk"));
-    EXPECT_FALSE(g.find_edge("Novosibirsk", "Krasnoyarsk"));
+    EXPECT_FALSE(ug.findEdge(Vertex("Omsk"), Vertex("Krasnoyarsk")));
+    EXPECT_FALSE(ug.findEdge(Vertex("Novosibirsk"), Vertex("Krasnoyarsk")));
 }
 
-TEST(GraphTest, AddInvalidData) {
-    graph g;
+TEST(GraphTest, AddEdge_NegativeWeight) {
+    UndirectedGraph ug = graphInit();
 
-    EXPECT_THROW(g.add_edge("Moscow", "Novosibirsk", -7), std::invalid_argument);
-    EXPECT_THROW(g.add_edge("Kiev", "Omsk", -6), std::invalid_argument);
+    EXPECT_THROW(ug.addEdge(Vertex("Moscow"), Vertex("Novosibirsk"), -7), std::invalid_argument);
+    EXPECT_THROW(ug.addEdge(Vertex("Kiev"), Vertex("Omsk"), -6), std::invalid_argument);
 }
 
-TEST(GraphTest, GetDistance) {
-    graph g = graph_init();
+TEST(GraphTest, GetWeight) {
+    UndirectedGraph ug = graphInit();
 
-    EXPECT_EQ(g.get_dist("Moscow", "Novosibirsk"), 7);
-    EXPECT_EQ(g.get_dist("Moscow", "Toronto"), 9);
-    EXPECT_EQ(g.get_dist("Omsk", "Kiev"), 6);
+    EXPECT_EQ(ug.getWeight(Vertex("Moscow"), Vertex("Novosibirsk")), 7);
+    EXPECT_EQ(ug.getWeight(Vertex("Moscow"), Vertex("Toronto")), 9);
+    EXPECT_EQ(ug.getWeight(Vertex("Omsk"), Vertex("Kiev")), 6);
 
-    EXPECT_THROW(g.get_dist("Moscow", "Omsk"), std::invalid_argument);
+    EXPECT_THROW(ug.getWeight(Vertex("Moscow"), Vertex("Omsk")), std::invalid_argument);
 }
 
 TEST(GraphTest, GetVertexes) {
-    graph g = graph_init();
+    UndirectedGraph ug = graphInit();
 
-    EXPECT_EQ(g.get_vertexes().size(), 6);
-    EXPECT_EQ(g.get_vertexes()[0], "Kiev");
-    EXPECT_EQ(g.get_vertexes()[1], "Krasnoyarsk");
-    EXPECT_EQ(g.get_vertexes()[2], "Moscow");
-    EXPECT_EQ(g.get_vertexes()[3], "Novosibirsk");
-    EXPECT_EQ(g.get_vertexes()[4], "Omsk");
-    EXPECT_EQ(g.get_vertexes()[5], "Toronto");
+    EXPECT_EQ(ug.getVertices().size(), 6);
+    EXPECT_EQ(ug.getVertices()[0], Vertex("Kiev"));
+    EXPECT_EQ(ug.getVertices()[1], Vertex("Krasnoyarsk"));
+    EXPECT_EQ(ug.getVertices()[2], Vertex("Moscow"));
+    EXPECT_EQ(ug.getVertices()[3], Vertex("Novosibirsk"));
+    EXPECT_EQ(ug.getVertices()[4], Vertex("Omsk"));
+    EXPECT_EQ(ug.getVertices()[5], Vertex("Toronto"));
 }
 
 TEST(GraphTest, GetNeighbors) {
-    graph g = graph_init();
+    UndirectedGraph ug = graphInit();
 
-    EXPECT_EQ(g.get_neighbors("Novosibirsk").size(), 3);
-    EXPECT_EQ(g.get_neighbors("Novosibirsk")[0], "Moscow");
-    EXPECT_EQ(g.get_neighbors("Novosibirsk")[1], "Omsk");
-    EXPECT_EQ(g.get_neighbors("Novosibirsk")[2], "Toronto");
+    EXPECT_EQ(ug.getNeighbors(Vertex("Novosibirsk")).size(), 3);
+    EXPECT_EQ(ug.getNeighbors(Vertex("Novosibirsk"))[0], Vertex("Moscow"));
+    EXPECT_EQ(ug.getNeighbors(Vertex("Novosibirsk"))[1], Vertex("Omsk"));
+    EXPECT_EQ(ug.getNeighbors(Vertex("Novosibirsk"))[2], Vertex("Toronto"));
 }
 
-TEST(ParserTest, ReadValidData) {
+TEST(ParserTest, Read) {
     std::istringstream iss(
         "\tMoscow, -Novosibirsk. 7 \n" \
         "\tMoscow, -Toronto. 9 "
     );
 
-    graph g = parser::read(iss, " \t,.-");
-    EXPECT_EQ(g.get_dist("Moscow", "Novosibirsk"), 7);
-    EXPECT_EQ(g.get_dist("Moscow", "Toronto"), 9);
-}
-
-TEST(ParserTest, ReadInvalidData) {
-    std::istringstream iss(
-        "\tMoscow, -Novosibirsk \n" \
-        "\tMoscow, -Toronto "
-    );
-
-    EXPECT_THROW(graph g = parser::read(iss, " \t,.-"), std::invalid_argument);
+    UndirectedGraph ug = Parser::read(iss, " \t,.-");
+    EXPECT_EQ(ug.getWeight(Vertex("Moscow"), Vertex("Novosibirsk")), 7);
+    EXPECT_EQ(ug.getWeight(Vertex("Moscow"), Vertex("Toronto")), 9);
 }
 
 TEST(ParserTest, Write) {
     std::ostringstream oss;
-    path p = {{ "Moscow", "Toronto", "Krasnoyarsk" }, 11};
+    Path p = { { Vertex("Moscow"), Vertex("Toronto"), Vertex("Krasnoyarsk") }, 11 };
 
-    parser::write(oss, p);
+    Parser::write(oss, p);
     EXPECT_EQ(oss.str(), "{ Moscow, Toronto, Krasnoyarsk } - 11");
 }
 
 TEST(DijkstraTest, FindPath) {
-    graph g_1 = graph_init();
+    UndirectedGraph ug_1 = graphInit();
 
-    path res_1 = dijkstra::find_path(g_1, "Moscow", "Krasnoyarsk");
-    EXPECT_EQ(res_1.first.size(), 3);
-    EXPECT_EQ(res_1.first[0], "Moscow");
-    EXPECT_EQ(res_1.first[1], "Toronto");
-    EXPECT_EQ(res_1.first[2], "Krasnoyarsk");
-    EXPECT_EQ(res_1.second, 11);
+    Path p_1 = Dijkstra::findPath(ug_1, Vertex("Moscow"), Vertex("Krasnoyarsk"));
+    EXPECT_EQ(p_1.path.size(), 3);
+    EXPECT_EQ(p_1.path[0], Vertex("Moscow"));
+    EXPECT_EQ(p_1.path[1], Vertex("Toronto"));
+    EXPECT_EQ(p_1.path[2], Vertex("Krasnoyarsk"));
+    EXPECT_EQ(p_1.weight, 11);
 
-    path res_2 = dijkstra::find_path(g_1, "Kiev", "Kiev");
-    EXPECT_EQ(res_2.first.size(), 1);
-    EXPECT_EQ(res_2.first[0], "Kiev");
-    EXPECT_EQ(res_2.second, 0);
+    Path p_2 = Dijkstra::findPath(ug_1, Vertex("Kiev"), Vertex("Kiev"));
+    EXPECT_EQ(p_2.path.size(), 1);
+    EXPECT_EQ(p_2.path[0], Vertex("Kiev"));
+    EXPECT_EQ(p_2.weight, 0);
 
-    graph g_2;
-    g_2.add_edge("Moscow", "Novosibirsk", 7);
-    g_2.add_edge("Omsk", "Toronto", 11);
+    UndirectedGraph ug_2;
+    ug_2.addEdge(Vertex("Moscow"), Vertex("Novosibirsk"), 7);
+    ug_2.addEdge(Vertex("Omsk"), Vertex("Toronto"), 11);
 
-    EXPECT_THROW(dijkstra::find_path(g_2, "Moscow", "Toronto"), std::invalid_argument);
+    EXPECT_THROW(Dijkstra::findPath(ug_2, Vertex("Moscow"), Vertex("Toronto")), std::invalid_argument);
 }

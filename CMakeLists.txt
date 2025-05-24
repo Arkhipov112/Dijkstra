@@ -9,33 +9,45 @@ add_subdirectory(
 )
 
 add_library(
-    graph
-    graph/graph.cpp
-    graph/graph.hpp
+    vertex
+
+    vertex/vertex.cpp
+)
+
+add_library(
+    undirected_graph
+
+    undirected_graph/undirected_graph.cpp
 )
 
 add_library(
     parser
+
     parser/parser.cpp
-    parser/parser.hpp
 )
 
 add_library(
     dijkstra
+
     dijkstra/dijkstra.cpp
-    dijkstra/dijkstra.hpp
 )
 
 add_executable(
     DijkstraTest
+
     test/test.cpp
 )
 
 target_link_libraries(
     DijkstraTest
+
     gtest
     gtest_main
-    graph
+
+    vertex
+    undirected_graph
+
     parser
+    
     dijkstra
 )

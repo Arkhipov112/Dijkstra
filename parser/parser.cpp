@@ -1,14 +1,14 @@
+#include "parser.hpp"
+
 #include <sstream>
 #include <stdexcept>
-
-#include "parser.hpp"
 
 namespace {
 	const int PARSED_COUNT = 3;
 }
 
-graph parser::read(std::istream& in, const std::string& delims) {
-    graph res;
+UndirectedGraph Parser::read(std::istream& in, const std::string& delims) {
+    UndirectedGraph ug;
 
     std::string line;
     while(std::getline(in, line)) {
@@ -18,26 +18,26 @@ graph parser::read(std::istream& in, const std::string& delims) {
 			throw (std::invalid_argument("Does not match the type"));
 		}
 
-        res.add_edge(temp[0], temp[1], std::stoi(temp[2]));
+        ug.addEdge(Vertex(temp[0]), Vertex(temp[1]), std::stoi(temp[2]));
     }
 
-    return res;
+    return ug;
 }
 
-void parser::write(std::ostream& out, const path& buffer) noexcept {
+void Parser::write(std::ostream& out, const Path& buffer) noexcept {
 	out << "{ ";
 
-	size_t len = buffer.first.size();
+	size_t len = buffer.path.size();
 	for (int i = 0; i < len - 1; ++i) {
-		out << buffer.first[i] << ", ";
+		out << buffer.path[i].getName() << ", ";
 	}
 
-	out << buffer.first[len - 1] << " } - " << buffer.second;
+	out << buffer.path[len - 1].getName() << " } - " << buffer.weight;
 }
 
 
 
-std::vector<std::string> parser::split(const std::string& line, const std::string& delims) {
+std::vector<std::string> Parser::split(const std::string& line, const std::string& delims) {
 	std::vector<std::string> res;
 
 	std::istringstream iss(line);
