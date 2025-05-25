@@ -14,12 +14,16 @@ UndirectedGraph Parser::read(std::istream& in, const std::string& delims) {
     while(std::getline(in, line)) {
         std::vector<std::string> temp = split(line, delims);
 
-		if (temp.size() != PARSED_COUNT) {
-			throw (std::invalid_argument("Does not match the type"));
+		try {
+			if (temp.size() == PARSED_COUNT) {
+        		ug.addEdge(Vertex(temp[0]), Vertex(temp[1]), std::stoi(temp[2]));
+			}
 		}
 
-        ug.addEdge(Vertex(temp[0]), Vertex(temp[1]), std::stoi(temp[2]));
-    }
+		catch (const std::exception& ex) {
+			continue;
+		}
+	}
 
     return ug;
 }
