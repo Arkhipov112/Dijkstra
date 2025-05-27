@@ -15,6 +15,12 @@ add_library(
 )
 
 add_library(
+    path
+
+    path/path.cpp
+)
+
+add_library(
     undirected_graph
 
     undirected_graph/undirected_graph.cpp
@@ -45,6 +51,7 @@ target_link_libraries(
     gtest_main
 
     vertex
+    path
     undirected_graph
 
     parser

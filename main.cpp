@@ -1,3 +1,4 @@
+#include "path/path.hpp"
 #include "parser/parser.hpp"
 #include "dijkstra/dijkstra.hpp"
 

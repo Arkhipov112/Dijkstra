@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../path/path.hpp"
 #include "../undirected_graph/undirected_graph.hpp"
 #include "../dijkstra/dijkstra.hpp"
 

@@ -1,15 +1,8 @@
 #pragma once
 
+#include "../path/path.hpp"
 #include "../vertex/vertex.hpp"
 #include "../undirected_graph/undirected_graph.hpp"
-
-#include <string>
-#include <vector>
-
-struct Path final {
-    std::vector<Vertex> path;
-    int weight;
-};
 
 class Dijkstra final {
 public:
