@@ -10,9 +10,9 @@
 class Parser final {
 public:
 	Parser() = delete;
-    static UndirectedGraph read(std::istream& in, const std::string& delims);
+    static UndirectedGraph read(std::istream& in, const std::string& delimeters);
 	static void write(std::ostream& out, const Path& buffer) noexcept;
 
 private:
-	static std::vector<std::string> split(const std::string& line, const std::string& delims);
+	static std::vector<std::string> split(const std::string& line, const std::string& delimeters);
 };

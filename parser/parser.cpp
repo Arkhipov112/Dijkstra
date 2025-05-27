@@ -7,12 +7,12 @@ namespace {
 	const int PARSED_COUNT = 3;
 }
 
-UndirectedGraph Parser::read(std::istream& in, const std::string& delims) {
+UndirectedGraph Parser::read(std::istream& in, const std::string& delimeters) {
     UndirectedGraph ug;
 
     std::string line;
     while(std::getline(in, line)) {
-        std::vector<std::string> temp = split(line, delims);
+        std::vector<std::string> temp = split(line, " " + delimeters);
 
 		try {
 			if (temp.size() == PARSED_COUNT) {
@@ -41,7 +41,7 @@ void Parser::write(std::ostream& out, const Path& buffer) noexcept {
 
 
 
-std::vector<std::string> Parser::split(const std::string& line, const std::string& delims) {
+std::vector<std::string> Parser::split(const std::string& line, const std::string& delimeters) {
 	std::vector<std::string> res;
 
 	std::istringstream iss(line);
@@ -49,7 +49,7 @@ std::vector<std::string> Parser::split(const std::string& line, const std::strin
 
 	char c;
 	while (iss.get(c)) {
-		if (delims.find(c) != std::string::npos) {
+		if (delimeters.find(c) != std::string::npos) {
 			if (!token.empty()) {
 				res.push_back(token);
 				token.clear();

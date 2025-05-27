@@ -4,9 +4,3 @@
 #include "test_undirected_graph.hpp"
 #include "test_parser.hpp"
 #include "test_dijkstra.hpp"
-
-int main() {
-    testing::InitGoogleTest();
-
-    return RUN_ALL_TESTS();
-}
