@@ -30,7 +30,7 @@ int main() {
     }
 
     UndirectedGraph ug = Parser::read(ifs, delimeters);
-    Path path = Dijkstra::findPath(ug, Vertex(start), Vertex(end));
 
+    Path path = Dijkstra::findPath(ug, Vertex(start), Vertex(end));
     Parser::write(std::cout, path);
 }

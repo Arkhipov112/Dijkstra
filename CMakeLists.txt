@@ -41,7 +41,7 @@ add_library(
 add_executable(
     DijkstraTest
 
-    test/test.cpp
+    main.cpp
 )
 
 target_link_libraries(
@@ -49,12 +49,12 @@ target_link_libraries(
 
     gtest
     gtest_main
+    parser
 
     vertex
     path
     undirected_graph
 
-    parser
     
     dijkstra
 )

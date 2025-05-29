@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 void UndirectedGraph::addEdge(const Vertex& v_1, const Vertex& v_2, int weight) {
-    if (weight < 0) {
+    if (weight <= 0) {
         throw (std::invalid_argument("Weight cannot be negative"));
     }
 
